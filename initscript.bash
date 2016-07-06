@@ -12,7 +12,7 @@
 # Load sysconfig
 source /etc/sysconfig/watcher
 
-if [ -z $CHECK_CMD || -z $USER || -z $APPPATH || -z $PORT] ; then
+if [[ -z $CHECK_CMD || -z $USER || -z $APPPATH || -z $PORT ]] ; then
   echo "Missing CHECK_CMD, USER, APPPATH, or PORT variable. Make sure you have it defined in /etc/sysconfig/watcher"
 fi
 

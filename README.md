@@ -9,9 +9,14 @@ This assumes a CentOS/RedHat-like system. Everything else should be easily hacka
 * Clone or download the repo into a place of your choosing (such as /opt/watcher) and go into that directory
 
 ```bash
-cp ./initscript.bash /etc/init.d/watcher
+export USERTOUSE=<username>
+```
+
+```bash
+cp ./initscript.bash /etc/init.d/watcher ; chmod +x /etc/init.d/watcher
 cp ./watcher.sysconfig /etc/sysconfig/watcher
-chown -R <username> ./
+chown -R $USERTOUSE ./
+touch /var/log/watcher.log ; chown $USERTOUSE /var/log/watcher
 ```
 
 Edit <code>/etc/sysconfig/watcher</code> if needed. You'll want to change the CHECK_COMMAND at minimum.
@@ -28,5 +33,4 @@ curl http://hostname:watcher-port/status
 Return values:
 * OK - Check command returned 0 and maint file is abscent.
 * MAINT - Maint file is present. We don't care what the check command returns.
-* FAIL - Maint file is abscent. Check command returned something other than 0 status. 
-
+* FAIL - Maint file is abscent. Check command returned something other than 0 status.
