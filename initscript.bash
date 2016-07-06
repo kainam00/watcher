@@ -12,13 +12,13 @@
 # Load sysconfig
 source /etc/sysconfig/watcher
 
-if [ -z $CHECK_CMD || -z $USER ] ; then
-  echo "Missing CHECK_CMD or USER variable. Make sure you have it defined in /etc/sysconfig/watcher"
+if [ -z $CHECK_CMD || -z $USER || -z $APPPATH || -z $PORT] ; then
+  echo "Missing CHECK_CMD, USER, APPPATH, or PORT variable. Make sure you have it defined in /etc/sysconfig/watcher"
 fi
 
 LOGFILE="/var/log/watcher.log"
-START_CMD="/opt/watcher/watcher -p 5777 -m /opt/watcher/maint -c $CHECK_CMD > $LOGFILE 2>&1 &"
-START_DIR="/opt/watcher"
+START_CMD="$APPPATH/watcher -p $PORT -m $APPPATH/maint -c $CHECK_CMD > $LOGFILE 2>&1 &"
+START_DIR=$APPPATH
 NAME="watcher"
 PGREP_STRING="watcher"
 PID_FILE="/var/run/watcher.pid"
