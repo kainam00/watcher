@@ -1,2 +1,32 @@
 # watcher
-Simple Python script to monitor applications from a loadbalancer
+Simple Python script to monitor applications from a loadbalancer.
+
+The script will perform a defined application check and look for a maint file indicating that the application server is in maintenance mode. This prevents you from having to build this logic into the LB itself, and allows those monitors to be generic.
+
+<h3>Installation</h3>
+This assumes a CentOS/RedHat-like system. Everything else should be easily hackable.
+
+* Clone or download the repo into a place of your choosing (such as /opt/watcher) and go into that directory
+
+```bash
+cp ./initscript.bash /etc/init.d/watcher
+cp ./watcher.sysconfig /etc/sysconfig/watcher
+chown -R <username> ./
+```
+
+Edit <code>/etc/sysconfig/watcher</code> if needed. You'll want to change the CHECK_COMMAND at minimum.
+
+Start it up!
+```
+chkconfig watcher on
+service watcher start
+```
+
+<h3>Usage</h3>
+curl http://hostname:watcher-port/status
+
+Return values:
+* OK - Check command returned 0 and maint file is abscent.
+* MAINT - Maint file is present. We don't care what the check command returns.
+* FAIL - Maint file is abscent. Check command returned something other than 0 status. 
+
