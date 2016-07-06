@@ -1,0 +1,12 @@
+###########################################################
+# Simple config file for the watcher process              #
+# Should be copied or symlinked to /etc/sysconfig/watcher #
+###########################################################
+
+# What user to run as (needs to exist and have appropriate permissions)
+USER="watcher"
+
+# This defines the command that watcher will run (as whatever user it's running as).
+# MUST return 0 for success (unix standard) and something other than 0 for failure.
+# Other output doesn't matter, but will end up in the logs, so keep it reasonable or you'll fill the disk
+CHECK_CMD="curl -s localhost:80 -o /dev/null"

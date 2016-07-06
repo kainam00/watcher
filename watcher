@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+
+# Includes
+import getopt
+import sys
+import os.path
+import subprocess
+import BaseHTTPServer
+import SocketServer
+
+########  Predefined variables #########
+helpstring = """Usage: {scriptname} args...
+    Where args are:
+        -h, --help
+            Show help
+
+        -p PORTNUMBER
+            Port number to run on
+
+        -m PATH/FILENAME
+            Path where to look for the maintenance file at. If the file exists, we return a MAINT status.
+
+        -c 'command'
+            Command to use to check application status. Must return a 0 status if successful.
+
+"""
+
+helpstring = helpstring.format(scriptname=sys.argv[0])
+
+# appCheck
+# Returns true if all is good
+# Returns false if it's not
+def appCheck():
+    if subprocess.call(checkcommand, shell=True) == 0:
+        return True
+    else:
+        return False
+
+
+########  Functions and classes #########
+class WatcherRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(s):
+        if s.path == "/status":
+            # Check status
+            # Assume fail
+            code = 503
+            status = "FAIL"
+            if(os.path.isfile(maintfile)):
+                # Check for a maintenance file
+                code = 503
+                status="MAINT"
+            elif (appCheck() == True):
+                # If we're not in maintenance, run application check
+                code = 200
+                status="OK"
+
+            s.send_response(code)
+            s.send_header("Content-type", "text/html")
+            s.end_headers()
+            s.wfile.write(status)
+
+        else:
+            s.send_response(200)
+            s.send_header("Content-type", "text/html")
+            s.end_headers()
+            s.wfile.write("watcher")
+
+
+# Parse args
+try:
+    options, remainder = getopt.getopt(sys.argv[1:], "hp:m:c:", ['help'])
+except:
+    print("Invalid args. Use -h or --help for help.")
+    raise
+    sys.exit(1)
+
+for opt, arg in options:
+    if opt in ('-h', '--help'):
+        print helpstring
+        sys.exit(0)
+    elif opt in ('-p'):
+        HTTPPORT = int(arg)
+    elif opt in ('-m'):
+        maintfile = arg
+    elif opt in ('-c'):
+        checkcommand = arg
+
+# Start HTTP service
+server_class=BaseHTTPServer.HTTPServer
+handler_class=WatcherRequestHandler
+server_address = ('', HTTPPORT)
+httpd = server_class(server_address, handler_class)
+try:
+    httpd.serve_forever()
+except KeyboardInterrupt:
+    pass
+httpd.server_close()
