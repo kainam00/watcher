@@ -17,7 +17,7 @@ if [[ -z $CHECK_CMD || -z $USER || -z $APPPATH || -z $PORT ]] ; then
 fi
 
 LOGFILE="/var/log/watcher.log"
-START_CMD="$APPPATH/watcher -p $PORT -m $APPPATH/maint -c $CHECK_CMD > $LOGFILE 2>&1 &"
+START_CMD="$APPPATH/watcher -p $PORT -m $APPPATH/maint -c \"$CHECK_CMD\" > $LOGFILE 2>&1 &"
 START_DIR=$APPPATH
 NAME="watcher"
 PGREP_STRING="watcher"
