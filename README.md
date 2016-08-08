@@ -16,7 +16,7 @@ export USERTOUSE=<username>
 cp ./initscript.bash /etc/init.d/watcher ; chmod +x /etc/init.d/watcher
 cp ./watcher.sysconfig /etc/sysconfig/watcher
 chown -R $USERTOUSE ./
-touch /var/log/watcher.log ; chown $USERTOUSE /var/log/watcher
+touch /var/log/watcher.log ; chown $USERTOUSE /var/log/watcher.log
 ```
 
 Edit <code>/etc/sysconfig/watcher</code> if needed. You'll want to change the CHECK_COMMAND at minimum.
