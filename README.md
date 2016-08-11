@@ -20,6 +20,7 @@ touch /var/log/watcher.log ; chown $USERTOUSE /var/log/watcher.log
 ```
 
 Edit <code>/etc/sysconfig/watcher</code> if needed. You'll want to change the CHECK_COMMAND at minimum.
+IMPORTANT: Whatever you put into the CHECK_COMMAND variable will be visible in the process list. Don't use anything sensitive (such as auth credentials) in there.
 
 Start it up!
 ```
