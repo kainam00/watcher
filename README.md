@@ -6,6 +6,11 @@ The script will perform a defined application check and look for a maint file in
 <h3>Installation</h3>
 This assumes a CentOS/RedHat-like system. Everything else should be easily hackable.
 
+<h4>Easy-mode</h4>
+Grab the RPM from the RPM directory. Install it manually, add it to you local repo, do whatever you want. The associated documentation is in there, but it's pretty easy-mode.
+
+<h4>Manual</h4>
+Also not that complicated, just more of a pain if you're putting this on a lot of hosts.
 * Clone or download the repo into a place of your choosing (such as /opt/watcher) and go into that directory
 
 ```bash
