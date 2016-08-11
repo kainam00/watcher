@@ -9,6 +9,7 @@ USER="watcher"
 # This defines the command that watcher will run (as whatever user it's running as).
 # MUST return 0 for success (unix standard) and something other than 0 for failure.
 # Other output doesn't matter, but will end up in the logs, so keep it reasonable or you'll fill the disk
+# IMPORTANT: Whatever you put here will be visible in the process list. Don't use anything sensitive such as credentials!!! 
 CHECK_CMD='curl -s localhost:80 -o /dev/null'
 
 # Path where watcher lives
