@@ -1,6 +1,6 @@
-%define _topdir	 	/root
-%define name			watcher 
-%define release		1
+%define _topdir	 	/root/rpmbuild
+%define name			watcher
+%define release		2
 %define version 	1
 %define buildroot %{_topdir}/%{name}-%{version}-root
 
@@ -26,9 +26,9 @@ pwd
 mkdir -p $RPM_BUILD_ROOT/opt/watcher
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 mkdir -p $RPM_BUILD_ROOT/etc/sysconfig
-cp /root/SOURCES/watcher/watcher $RPM_BUILD_ROOT/opt/watcher
-cp /root/SOURCES/watcher/initscript.bash $RPM_BUILD_ROOT/etc/init.d/watcher
-cp /root/SOURCES/watcher/watcher.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/watcher
+cp /root/rpmbuild/SOURCES/watcher/watcher $RPM_BUILD_ROOT/opt/watcher
+cp /root/rpmbuild/SOURCES/watcher/initscript.bash $RPM_BUILD_ROOT/etc/init.d/watcher
+cp /root/rpmbuild/SOURCES/watcher/watcher.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/watcher
 
 
 %files
@@ -37,10 +37,9 @@ cp /root/SOURCES/watcher/watcher.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/watcher
 /etc/init.d/watcher
 /etc/sysconfig/watcher
 
-%post 
-useradd watcher
+%post
+useradd -d /opt/watcher -m watcher
 chmod +x /etc/init.d/watcher
 touch /var/log/watcher.log
 chown watcher /var/log/watcher.log
 chown -R watcher /opt/watcher
-
