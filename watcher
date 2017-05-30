@@ -7,6 +7,7 @@ import os.path
 import subprocess
 import BaseHTTPServer
 import SocketServer
+import threading
 
 ########  Predefined variables #########
 helpstring = """Usage: {scriptname} args...
@@ -38,6 +39,9 @@ def appCheck():
 
 
 ########  Functions and classes #########
+class ThreadedHTTPServer(SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer):
+    pass
+
 class WatcherRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(s):
         if s.path == "/status":
@@ -86,7 +90,7 @@ for opt, arg in options:
         checkcommand = arg
 
 # Start HTTP service
-server_class=BaseHTTPServer.HTTPServer
+server_class=ThreadedHTTPServer
 handler_class=WatcherRequestHandler
 server_address = ('', HTTPPORT)
 httpd = server_class(server_address, handler_class)
