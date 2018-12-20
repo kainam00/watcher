@@ -1,6 +1,6 @@
 %define _topdir	 	/root/rpmbuild
 %define name			watcher
-%define release		4
+%define release		5
 %define version 	1
 %define buildroot %{_topdir}/%{name}-%{version}-root
 
