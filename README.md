@@ -1,7 +1,7 @@
 # watcher
 Simple Python script to monitor applications from a loadbalancer.
 
-The script will perform a defined application check and look for a maint file indicating that the application server is in maintenance mode. This prevents you from having to build this logic into the LB itself, and allows those monitors to be generic.
+The script will perform a defined application check and look for a maint file indicating that the application server is in maintenance mode. This prevents you from having to build this logic into the LB itself, and allows those monitors to be generic. 
 
 <h3>Installation</h3>
 This assumes a CentOS/RedHat-like system. Everything else should be easily hackable.
@@ -34,9 +34,23 @@ service watcher start
 ```
 
 <h3>Usage</h3>
+/status - main status check URL
+/gslbcheck - secondary status check URL to allow for usage with loadbalancers/GSLB. This will allow you to "soft" fail the pool
+
 curl http://hostname:watcher-port/status
+curl http://hostname:watcher-port/gslbcheck
 
 Return values:
 * OK - Check command returned 0 and maint file is abscent.
 * MAINT - Maint file is present. We don't care what the check command returns.
 * FAIL - Maint file is abscent. Check command returned something other than 0 status.
+
+<h4>Maint files</h4>
+There are two maint files available. Create one of these to trigger the appropriate healthcheck behavior:
+* <applicaiton path>/maint 
+** /status = MAINT
+** /gslbcheck = MAINT
+* <application path>/maint.gslbcheck
+** /status = OK
+** /gslbcheck = MAINT
+

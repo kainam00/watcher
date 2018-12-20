@@ -44,13 +44,20 @@ class ThreadedHTTPServer(SocketServer.ThreadingMixIn, BaseHTTPServer.HTTPServer)
 
 class WatcherRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(s):
-        if s.path == "/status":
+        if s.path == "/status" or s.path == "/gslbcheck":
             # Check status
             # Assume fail
             code = 503
             status = "FAIL"
+
             if(os.path.isfile(maintfile)):
                 # Check for a maintenance file
+                code = 503
+                status="MAINT"
+            elif s.path == "/gslbcheck" and os.path.isfile(maintfile + ".gslbcheck"):
+                # Check for a maintenance file
+                # Allow for different maintfile to be used for the gslbcheck. This allows us to trigger a GSLB failover without failing the 
+                # main healthcheck
                 code = 503
                 status="MAINT"
             elif (appCheck() == True):
@@ -62,7 +69,6 @@ class WatcherRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/html")
             s.end_headers()
             s.wfile.write(status)
-
         else:
             s.send_response(200)
             s.send_header("Content-type", "text/html")
