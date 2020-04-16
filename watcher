@@ -54,16 +54,21 @@ class WatcherRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 # Check for a maintenance file
                 code = 503
                 status="MAINT"
+                s.log_message("Maintfile " + maintfile + " in place")
             elif s.path == "/gslbcheck" and os.path.isfile(maintfile + ".gslbcheck"):
                 # Check for a maintenance file
                 # Allow for different maintfile to be used for the gslbcheck. This allows us to trigger a GSLB failover without failing the 
                 # main healthcheck
                 code = 503
                 status="MAINT"
-            elif (appCheck() == True):
-                # If we're not in maintenance, run application check
-                code = 200
-                status="OK"
+                s.log_message("Maintfile " + maintfile + ".gslbcheck in place")
+            else:
+                if (appCheck() == True):
+                    # If we're not in maintenance, run application check
+                    code = 200
+                    status="OK"
+                else:
+                    s.log_message("Application health check failed")
 
             s.send_response(code)
             s.send_header("Content-type", "text/html")
